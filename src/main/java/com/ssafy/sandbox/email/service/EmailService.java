@@ -1,7 +1,7 @@
 package com.ssafy.sandbox.email.service;
 
 import com.ssafy.sandbox.email.dto.EmailDto;
-import com.ssafy.sandbox.email.dto.EmailResponse;
+import com.ssafy.sandbox.email.dto.EmailSendResponse;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    public EmailResponse sendEmail(EmailDto emailDto) {
+    public EmailSendResponse sendEmail(EmailDto emailDto) {
         String email = emailDto.getEmail();
         String authCode = generateAuthCode();
 
@@ -29,9 +29,9 @@ public class EmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
 
-            return EmailResponse.of(false);
+            return EmailSendResponse.of(false);
         }
-        return EmailResponse.of(true);
+        return EmailSendResponse.of(true);
     }
 
     private String generateAuthCode() {

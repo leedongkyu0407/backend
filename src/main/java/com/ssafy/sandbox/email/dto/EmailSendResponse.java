@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmailResponse {
+public class EmailSendResponse {
 
     private boolean isOk;
 
-    public static EmailResponse of(boolean isOk){
-        return EmailResponse.builder()
+    public static EmailSendResponse of(boolean isOk){
+        return EmailSendResponse.builder()
                 .isOk(isOk)
                 .build();
     }
