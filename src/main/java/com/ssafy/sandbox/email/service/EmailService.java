@@ -1,7 +1,11 @@
 package com.ssafy.sandbox.email.service;
 
-import com.ssafy.sandbox.email.dto.EmailDto;
+import com.ssafy.sandbox.email.domain.SandboxEmail;
+import com.ssafy.sandbox.email.dto.EmailAuthRequest;
+import com.ssafy.sandbox.email.dto.EmailAuthResponse;
+import com.ssafy.sandbox.email.dto.EmailSendRequest;
 import com.ssafy.sandbox.email.dto.EmailSendResponse;
+import com.ssafy.sandbox.email.repository.EmailRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -9,14 +13,17 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private final EmailRepository emailRepository;
 
-    public EmailSendResponse sendEmail(EmailDto emailDto) {
-        String email = emailDto.getEmail();
+    public EmailSendResponse sendEmail(EmailSendRequest emailSendRequest) {
+        String email = emailSendRequest.getEmail();
         String authCode = generateAuthCode();
 
         try{
@@ -27,11 +34,18 @@ public class EmailService {
             mimeMessageHelper.setSubject("인증번호 발송");
             mimeMessageHelper.setText("인증번호는 " + authCode + " 입니다.");
             mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
 
+            SandboxEmail sandboxEmail = emailRepository.findByEmail(email);
+            if(sandboxEmail != null){
+                sandboxEmail.updateAuthcode(authCode);
+            } else if(sandboxEmail == null){
+                sandboxEmail = SandboxEmail.of(email, authCode);
+            }
+            emailRepository.save(sandboxEmail);
+            return EmailSendResponse.of(true);
+        } catch (MessagingException e) {
             return EmailSendResponse.of(false);
         }
-        return EmailSendResponse.of(true);
     }
 
     private String generateAuthCode() {
@@ -39,4 +53,16 @@ public class EmailService {
         return String.valueOf(authCode);
     }
 
+    public EmailAuthResponse authEmail(EmailAuthRequest emailAuthRequest) {
+        SandboxEmail sandboxEmail = emailRepository.findByEmail(emailAuthRequest.getEmail());
+        boolean isSuccess = false;
+        if(emailAuthRequest.getEmail().equals(sandboxEmail.getEmail()) && sandboxEmail.getExpireDate().isAfter(LocalDateTime.now())){
+            isSuccess = true;
+        } else if(!emailAuthRequest.getEmail().equals(sandboxEmail.getEmail()) || sandboxEmail.getExpireDate().isBefore(LocalDateTime.now())){
+            isSuccess = false;
+        }
+        return EmailAuthResponse.builder()
+                .isSuccess(isSuccess)
+                .build();
+    }
 }
