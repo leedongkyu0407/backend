@@ -19,4 +19,7 @@ public class EmailSendResponse {
                 .build();
     }
 
+    public boolean getIsOk(){
+        return isOk;
+    }
 }

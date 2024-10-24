@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmailDto {
+public class EmailSendRequest {
 
     private String email;
 
-    public static EmailDto of(String email) {
-        return EmailDto.builder()
+    public static EmailSendRequest of(String email) {
+        return EmailSendRequest.builder()
                 .email(email)
                 .build();
     }
