@@ -1,7 +1,6 @@
 package com.ssafy.sandbox.email.repository;
 
 import com.ssafy.sandbox.email.domain.SandboxEmail;
-import org.hibernate.sql.Delete;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

@@ -70,7 +70,7 @@ public class EmailService {
                 .build();
     }
 
-//  하루에 한 번 DB 내부에 인증 시간이 지난 이메일 데이터 삭제
+//  하루에 한 번(00시) 인증 시간이 지난 이메일 데이터를 DB에서 삭제
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void autoDeleteEmail() {
