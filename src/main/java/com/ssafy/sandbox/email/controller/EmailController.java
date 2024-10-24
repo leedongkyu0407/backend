@@ -1,6 +1,8 @@
 package com.ssafy.sandbox.email.controller;
 
-import com.ssafy.sandbox.email.dto.EmailDto;
+import com.ssafy.sandbox.email.dto.EmailAuthRequest;
+import com.ssafy.sandbox.email.dto.EmailAuthResponse;
+import com.ssafy.sandbox.email.dto.EmailSendRequest;
 import com.ssafy.sandbox.email.dto.EmailSendResponse;
 import com.ssafy.sandbox.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,15 @@ public class EmailController {
 
     private final EmailService emailService;
     @PostMapping()
-    public ResponseEntity<EmailSendResponse> sendEmail(@RequestBody EmailDto emailDto) {
-        log.debug("Sending email: {}", emailDto.getEmail());
-        EmailSendResponse emailSendResponse = emailService.sendEmail(emailDto);
-        return ResponseEntity.ok(emailSendResponse);
+    public ResponseEntity<EmailSendResponse> sendEmail(@RequestBody EmailSendRequest emailSendRequest) {
+        log.debug("Sending email: {}", emailSendRequest.getEmail());
+        EmailSendResponse emailSendResponse = emailService.sendEmail(emailSendRequest);
+        return ResponseEntity.ok().body(emailSendResponse);
+    }
+
+    @PostMapping("/authentication")
+    public ResponseEntity<EmailAuthResponse> authEmail(@RequestBody EmailAuthRequest emailAuthRequest) {
+        EmailAuthResponse emailAuthResponse = emailService.authEmail(emailAuthRequest);
+        return ResponseEntity.ok(emailAuthResponse);
     }
 }
