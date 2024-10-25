@@ -1,21 +1,12 @@
 package com.ssafy.sandbox.email.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class EmailSendRequest {
 
     private String email;
-
-    public static EmailSendRequest of(String email) {
-        return EmailSendRequest.builder()
-                .email(email)
-                .build();
-    }
 }
