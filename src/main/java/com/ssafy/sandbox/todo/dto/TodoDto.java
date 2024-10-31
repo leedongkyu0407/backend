@@ -3,9 +3,8 @@ package com.ssafy.sandbox.todo.dto;
 import com.ssafy.sandbox.todo.domain.Todo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
-@Getter @ToString
+@Getter
 public class TodoDto {
 
     private Long id;

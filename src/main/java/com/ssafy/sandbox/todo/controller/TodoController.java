@@ -4,9 +4,8 @@ import com.ssafy.sandbox.todo.dto.TodoDto;
 import com.ssafy.sandbox.todo.dto.TodoListResponse;
 import com.ssafy.sandbox.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/todos")
@@ -16,24 +15,24 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping()
-    public TodoListResponse listAllTodos(){
-        List<TodoDto> todos = todoService.getTodos();
-        return new TodoListResponse(todos);
+    public ResponseEntity<TodoListResponse> listAllTodos(){
+        return ResponseEntity.ok().body(todoService.getTodos());
     }
 
     @PostMapping()
-    public TodoDto createTodo(@RequestBody TodoDto todoDto){
-        return todoService.createTodo(todoDto);
+    public ResponseEntity<TodoDto> createTodo(@RequestBody TodoDto todoDto){
+        return ResponseEntity.ok().body(todoService.createTodo(todoDto));
     }
 
     @DeleteMapping("/{todoId}")
-    public void deleteTodo(@PathVariable Long todoId){
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long todoId){
         todoService.deleteTodo(todoId);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{todoId}")
-    public void updateTodo(@PathVariable Long todoId){
+    public ResponseEntity<Void> updateTodo(@PathVariable Long todoId){
         todoService.updateTodo(todoId);
+        return ResponseEntity.ok().build();
     }
-
 }

@@ -1,13 +1,15 @@
 package com.ssafy.sandbox.todo.domain;
 
+import com.ssafy.sandbox.todo.dto.TodoDto;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name="todos")
-@Getter @Setter @ToString
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +18,17 @@ public class Todo {
     private String content;
     @Column(name = "completed")
     private boolean completed;
+
+    public static Todo from(TodoDto todoDto){
+        return Todo.builder()
+                .id(todoDto.getId())
+                .content(todoDto.getContent())
+                .completed(todoDto.isCompleted())
+                .build();
+    }
+
+    public void toggleTodo(){
+        this.completed = !this.completed;
+    }
+
 }

@@ -1,18 +1,18 @@
 package com.ssafy.sandbox.todo.dto;
 
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Getter
 public class TodoListResponse {
     private List<TodoDto> todos;
 
-    public TodoListResponse(List<TodoDto> todos){
-        this.todos = todos;
-    }
-
-    public List<TodoDto> getTodos(){
-        return todos;
+    public static TodoListResponse of(List<TodoDto> todos){
+        return TodoListResponse.builder()
+                .todos(todos)
+                .build();
     }
 }
